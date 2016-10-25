@@ -1,5 +1,5 @@
-- make a window which is able to minimize to system tray
-	|
-	- made an icon to appear in system tray
-	- hide the window from the taskbar
-	- make available the window to be restored from system tray by mouse double click on it
+- change the icon in system tray to custom one
+- make the program to be able to get if the laptop is in battery regime or not
+- make if the laptop go from non-batery to battery to pop-up with a message
+- add sound to the message from above
+- add the program to have options

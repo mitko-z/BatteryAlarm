@@ -1,0 +1,9 @@
+﻿  TrayMinDlg.cpp
+TrayMinDlg.cpp(263): warning C4996: 'strcpy': This function or variable may be unsafe. Consider using strcpy_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+  C:\Program Files\Windows Kits\10\Include\10.0.10240.0\ucrt\string.h(119): note: see declaration of 'strcpy'
+  Generating Code...
+e:\docs\programirane\win32formstutorial\traymin\traymin_src\traymin_source\traymindlg.cpp(187): warning C4700: uninitialized local variable 'valueToReturn' used
+  Skipping... (no relevant changes detected)
+  TrayMin.cpp
+  TrayMin.vcxproj -> E:\docs\programirane\Win32FormsTutorial\TrayMin\TrayMin_src\TrayMin_source\.\Debug\TrayMin.exe
+  TrayMin.vcxproj -> .\Debug\TrayMin.pdb (Full PDB)

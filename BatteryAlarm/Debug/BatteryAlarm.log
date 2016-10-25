@@ -1,19 +1,14 @@
-﻿Build started 03/06/2016 20:44:14.
-     1>Project "E:\docs\programirane\BatteryAlarm\BatteryAlarm\BatteryAlarm.vcxproj" on node 2 (Build target(s)).
-     1>ClCompile:
-         C:\Program Files\Microsoft Visual Studio 14.0\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /Od /Oy- /D WIN32 /D _DEBUG /D _WINDOWS /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /Yc"stdafx.h" /Fp"Debug\BatteryAlarm.pch" /Fo"Debug\\" /Fd"Debug\vc140.pdb" /Gd /TP /analyze- /errorReport:prompt stdafx.cpp
-         stdafx.cpp
-         C:\Program Files\Microsoft Visual Studio 14.0\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /Od /Oy- /D WIN32 /D _DEBUG /D _WINDOWS /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /Yu"stdafx.h" /Fp"Debug\BatteryAlarm.pch" /Fo"Debug\\" /Fd"Debug\vc140.pdb" /Gd /TP /analyze- /errorReport:prompt BatteryAlarm.cpp
-         BatteryAlarm.cpp
-       ResourceCompile:
-         C:\Program Files\Windows Kits\8.1\bin\x86\rc.exe /D _UNICODE /D UNICODE /l"0x0409" /nologo /fo"Debug\BatteryAlarm.res" BatteryAlarm.rc 
-       Link:
-         C:\Program Files\Microsoft Visual Studio 14.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"E:\docs\programirane\BatteryAlarm\BatteryAlarm\Debug\BatteryAlarm.exe" /INCREMENTAL /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /Debug /PDB:"E:\docs\programirane\BatteryAlarm\BatteryAlarm\Debug\BatteryAlarm.pdb" /SUBSYSTEM:WINDOWS /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"E:\docs\programirane\BatteryAlarm\BatteryAlarm\Debug\BatteryAlarm.lib" /MACHINE:X86 Debug\BatteryAlarm.res
-         Debug\BatteryAlarm.obj
-         Debug\stdafx.obj
-         BatteryAlarm.vcxproj -> E:\docs\programirane\BatteryAlarm\BatteryAlarm\Debug\BatteryAlarm.exe
-     1>Done Building Project "E:\docs\programirane\BatteryAlarm\BatteryAlarm\BatteryAlarm.vcxproj" (Build target(s)).
-
-Build succeeded.
-
-Time Elapsed 00:00:08.38
+﻿C:\Program Files\MSBuild\Microsoft.Cpp\v4.0\V140\Microsoft.CppBuild.targets(392,5): warning MSB8028: The intermediate directory (.\Debug\) contains files shared from another project (TrayMin.vcxproj).  This can lead to incorrect clean and rebuild behavior.
+  StdAfx.cpp
+C:\Program Files\Microsoft Visual Studio 14.0\VC\atlmfc\include\afx.h(38): warning C4996: 'MBCS_Support_Deprecated_In_MFC': MBCS support in MFC is deprecated and may be removed in a future version of MFC.
+  C:\Program Files\Microsoft Visual Studio 14.0\VC\atlmfc\include\afx.h(33): note: see declaration of 'MBCS_Support_Deprecated_In_MFC'
+  _WIN32_WINNT not defined. Defaulting to _WIN32_WINNT_MAXVER (see WinSDKVer.h)
+  BatteryAlarmDlg.cpp
+BatteryAlarmDlg.cpp(286): warning C4996: 'strcpy': This function or variable may be unsafe. Consider using strcpy_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+  C:\Program Files\Windows Kits\10\Include\10.0.10240.0\ucrt\string.h(119): note: see declaration of 'strcpy'
+  BatteryAlarm.cpp
+BatteryAlarm.cpp(52): warning C4996: 'CWinApp::Enable3dControls': CWinApp::Enable3dControls is no longer needed. You should remove this call.
+  C:\Program Files\Microsoft Visual Studio 14.0\VC\atlmfc\include\afxwin.h(5224): note: see declaration of 'CWinApp::Enable3dControls'
+  Generating Code...
+  BatteryAlarm.vcxproj -> E:\docs\programirane\BatteryAlarm\BatteryAlarm\.\Debug\BatteryAlarm.exe
+  BatteryAlarm.vcxproj -> .\Debug\BatteryAlarm.pdb (Full PDB)

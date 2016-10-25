@@ -1,0 +1,4 @@
+﻿  main.cpp
+     Creating library E:\docs\programirane\BatteryAlarm\SFML\BatteryAlarm\Debug\BatteryAlarm.lib and object E:\docs\programirane\BatteryAlarm\SFML\BatteryAlarm\Debug\BatteryAlarm.exp
+main.obj : error LNK2019: unresolved external symbol __imp__FindWindowA@8 referenced in function _main
+E:\docs\programirane\BatteryAlarm\SFML\BatteryAlarm\Debug\BatteryAlarm.exe : fatal error LNK1120: 1 unresolved externals
