@@ -60,8 +60,12 @@ END_MESSAGE_MAP()
 // CBatteryAlarmDlg dialog
 
 CBatteryAlarmDlg::CBatteryAlarmDlg(CWnd* pParent /*=NULL*/)
-	: CDialog(CBatteryAlarmDlg::IDD, pParent)
+	: CDialog(CBatteryAlarmDlg::IDD, pParent), 
+	m_bOnBattery(false), m_nBatteryPower(100),
+	m_hPowerSchemeNotify(NULL), m_hPowerSourceNotify(NULL),
+	m_hBatteryPowerNotify(NULL)
 {
+	m_iPowerChange = m_spsPower.ACLineStatus;
 	//{{AFX_DATA_INIT(CBatteryAlarmDlg)
 		// NOTE: the ClassWizard will add member initialization here
 	//}}AFX_DATA_INIT
@@ -87,6 +91,8 @@ BEGIN_MESSAGE_MAP(CBatteryAlarmDlg, CDialog)
 	ON_COMMAND(IDM_EXIT, OnExit)
 	ON_COMMAND(IDM_MENU1, OnMenu1)
 	//}}AFX_MSG_MAP
+	ON_WM_POWERBROADCAST()
+	ON_WM_TIMER()
 END_MESSAGE_MAP()
 
 /////////////////////////////////////////////////////////////////////////////
@@ -96,6 +102,22 @@ BOOL CBatteryAlarmDlg::OnInitDialog()
 {
 	CDialog::OnInitDialog();
 
+	
+	// power management preparation
+	m_hPowerSchemeNotify = RegisterPowerSettingNotification(m_hWnd, &GUID_POWERSCHEME_PERSONALITY, DEVICE_NOTIFY_WINDOW_HANDLE);
+	if (NULL == m_hPowerSchemeNotify)
+		ATLTRACE("Failed to register for notification of power scheme changes!\n");
+
+	if (GetSystemPowerStatus(&m_spsPower) == 0)
+	{
+		MessageBox ("Error: Could not get the system power status in InitDialog method!");
+	}
+	else 
+	{ 
+		m_iPowerChange = m_spsPower.ACLineStatus; 
+	}
+
+	
 	// Add "About..." menu item to system menu.
 
 	// IDM_ABOUTBOX must be in the system command range.
@@ -120,6 +142,8 @@ BOOL CBatteryAlarmDlg::OnInitDialog()
 	SetIcon(m_hIcon, FALSE);		// Set small icon
 	
 	// TODO: Add extra initialization here
+
+	SetTimer(42, 5000, nullptr);
 	
 	return TRUE;  // return TRUE  unless you set the focus to a control
 }
@@ -210,25 +234,25 @@ afx_msg LRESULT CBatteryAlarmDlg::OnTrayNotify(WPARAM wParam, LPARAM lParam)
 
 void CBatteryAlarmDlg::OnTrayLButtonDown(CPoint pt)
 {
-	SYSTEM_POWER_STATUS power;
+	
 	std::string message;
 
-	if (GetSystemPowerStatus(&power) == 0)
+	if (GetSystemPowerStatus(&m_spsPower) == 0)
 	{
 		message = "Error: Could not get the system power status!";
 	}
 
-	switch (power.ACLineStatus)
+	switch (m_spsPower.ACLineStatus)
 	{
 	case 1:
 		message = 
 			"You are now on AC power. \nThe battery curently is on " + 
-			std::to_string(power.BatteryLifePercent) + " percents";
+			std::to_string(m_spsPower.BatteryLifePercent) + " percents";
 		break;
 	case 0:
 		message = 
-			"You are now on battery power. \nThe battery will run after " + 
-			std::to_string(power.BatteryLifeTime) + " seconds";
+			"You are now on battery power. \nThe battery curently is on " + 
+			std::to_string(m_spsPower.BatteryLifePercent) + " percents";
 		break;
 	default:
 		message = "Warning! The battery status cannot be read!";
@@ -299,9 +323,9 @@ void CBatteryAlarmDlg::OnMinimize()
 
 		BSus = m_menu.LoadMenu(IDR_MENU1);
 		if(!(BSus))
-			MessageBox("Unabled to Loa menu");
+			MessageBox("Unable to Load menu");
 
-		bSuccess = Shell_NotifyIcon(NIM_ADD,&m_TrayData);
+		bSuccess = Shell_NotifyIcon(NIM_ADD, &m_TrayData);
 
 		if(!(bSuccess))
 			MessageBox("Unable to Set Tary Icon");
@@ -316,7 +340,8 @@ void CBatteryAlarmDlg::OnMinimize()
 
 void CBatteryAlarmDlg::OnExit() 
 {
-Shell_NotifyIcon(NIM_DELETE,&m_TrayData);
+	KillTimer(42);
+	Shell_NotifyIcon(NIM_DELETE, &m_TrayData);
 	DestroyWindow();
 	
 }
@@ -326,4 +351,120 @@ void CBatteryAlarmDlg::OnMenu1()
 
 	MessageBox("You have Clicked Menu1");
 
+}
+
+
+
+UINT CBatteryAlarmDlg::OnPowerBroadcast(UINT nPowerEvent, LPARAM nEventData)
+{
+
+	std::string message = "";
+
+	if (GetSystemPowerStatus(&m_spsPower) == 0)
+	{
+		message = "Error: Could not get the system power status!";
+	}
+
+	
+	if (PBT_POWERSETTINGCHANGE != nPowerEvent)
+	{
+		return 0;
+	}
+
+	if (m_spsPower.ACLineStatus == 0 & m_iPowerChange == 1)
+	{
+		message = "Warning! You just went on battery power.";
+		m_iPowerChange = 0;
+	}
+
+	if (m_spsPower.ACLineStatus == 1 & m_iPowerChange == 0)
+	{
+		m_iPowerChange = 1;
+	}
+
+	if (message != "")
+	{
+		MessageBox(message.c_str());
+	}
+	
+	//POWERBROADCAST_SETTING* pps = (POWERBROADCAST_SETTING*)nEventData;
+
+	//if (sizeof(GUID) == pps->DataLength &&
+	//	pps->PowerSetting == GUID_POWERSCHEME_PERSONALITY)
+	//{
+
+	//	// This is a power scheme change notification
+	//	GUID newScheme = *(GUID*)(DWORD_PTR)pps->Data;
+	//	
+	//	if (sizeof(int) == pps->DataLength &&
+	//		pps->PowerSetting == GUID_ACDC_POWER_SOURCE)
+	//	{
+	//		MessageBox("next if 1");
+	//		// This is a power source change notification
+	//		int nPowerSrc = *(int*)(DWORD_PTR)pps->Data;
+
+	//		m_bOnBattery = (0 != nPowerSrc);
+
+	//		m_cPowerSource.SetWindowText(m_bOnBattery ? _T("Battery") : _T("AC power"));
+
+	//		if (m_bOnBattery)
+	//		{
+	//			MessageBox("Warning: You just went on battery power!");
+
+	//		}
+
+	//	}
+	//	else if (sizeof(int) == pps->DataLength &&
+	//		pps->PowerSetting == GUID_BATTERY_PERCENTAGE_REMAINING)
+	//	{
+	//		MessageBox("next if 2");
+	//		// This is a battery power notification
+	//		int nPercentLeft = *(int*)(DWORD_PTR)pps->Data;
+	//		CString sPercentLeft;
+
+	//		sPercentLeft.Format(_T("%d"), nPercentLeft);
+	//		m_cBatteryPower.SetWindowText(sPercentLeft);
+	//		m_nBatteryPower = nPercentLeft;
+	//	}
+	//}
+
+
+	return CDialog::OnPowerBroadcast(nPowerEvent, nEventData);
+}
+
+
+void CBatteryAlarmDlg::OnTimer(UINT_PTR nIDEvent)
+{
+	if (nIDEvent == 42)
+	{
+		std::string message = "";
+
+		if (GetSystemPowerStatus(&m_spsPower) == 0)
+		{
+			message = "Error: Could not get the system power status!";
+		}
+
+		// debug
+		/*message = 
+			"m_spsPower = " + std::to_string(m_spsPower.ACLineStatus) + 
+			"; powerChange = " + std::to_string(m_iPowerChange);*/
+		
+		if (m_spsPower.ACLineStatus == 0 & m_iPowerChange == 1)
+		{
+			message = "Warning! You just went on battery power.";
+			m_iPowerChange = 0;
+		}
+
+		if (m_spsPower.ACLineStatus == 1 & m_iPowerChange == 0)
+		{
+			m_iPowerChange = 1;
+		}
+
+		if (message != "")
+		{
+			MessageBox(message.c_str());
+		}
+	}
+
+	CDialog::OnTimer(nIDEvent);
 }

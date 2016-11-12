@@ -1,14 +1,10 @@
 ﻿C:\Program Files\MSBuild\Microsoft.Cpp\v4.0\V140\Microsoft.CppBuild.targets(392,5): warning MSB8028: The intermediate directory (.\Debug\) contains files shared from another project (TrayMin.vcxproj).  This can lead to incorrect clean and rebuild behavior.
-  StdAfx.cpp
-C:\Program Files\Microsoft Visual Studio 14.0\VC\atlmfc\include\afx.h(38): warning C4996: 'MBCS_Support_Deprecated_In_MFC': MBCS support in MFC is deprecated and may be removed in a future version of MFC.
-  C:\Program Files\Microsoft Visual Studio 14.0\VC\atlmfc\include\afx.h(33): note: see declaration of 'MBCS_Support_Deprecated_In_MFC'
-  _WIN32_WINNT not defined. Defaulting to _WIN32_WINNT_MAXVER (see WinSDKVer.h)
   BatteryAlarmDlg.cpp
-BatteryAlarmDlg.cpp(286): warning C4996: 'strcpy': This function or variable may be unsafe. Consider using strcpy_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+BatteryAlarmDlg.cpp(310): warning C4996: 'strcpy': This function or variable may be unsafe. Consider using strcpy_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
   C:\Program Files\Windows Kits\10\Include\10.0.10240.0\ucrt\string.h(119): note: see declaration of 'strcpy'
-  BatteryAlarm.cpp
-BatteryAlarm.cpp(52): warning C4996: 'CWinApp::Enable3dControls': CWinApp::Enable3dControls is no longer needed. You should remove this call.
-  C:\Program Files\Microsoft Visual Studio 14.0\VC\atlmfc\include\afxwin.h(5224): note: see declaration of 'CWinApp::Enable3dControls'
-  Generating Code...
+BatteryAlarmDlg.cpp(374): warning C4554: '&': check operator precedence for possible error; use parentheses to clarify precedence
+BatteryAlarmDlg.cpp(380): warning C4554: '&': check operator precedence for possible error; use parentheses to clarify precedence
+BatteryAlarmDlg.cpp(452): warning C4554: '&': check operator precedence for possible error; use parentheses to clarify precedence
+BatteryAlarmDlg.cpp(458): warning C4554: '&': check operator precedence for possible error; use parentheses to clarify precedence
   BatteryAlarm.vcxproj -> E:\docs\programirane\BatteryAlarm\BatteryAlarm\.\Debug\BatteryAlarm.exe
   BatteryAlarm.vcxproj -> .\Debug\BatteryAlarm.pdb (Full PDB)

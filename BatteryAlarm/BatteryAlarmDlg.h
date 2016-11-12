@@ -9,6 +9,7 @@
 #endif // _MSC_VER > 1000
 
 #include <string> // for std::string variables
+#include <sstream>
 
 #define WM_TRAY_MESSAGE (WM_USER + 1)
 
@@ -23,7 +24,8 @@ public:
 	NOTIFYICONDATA m_TrayData;
 	void OnTrayRButtonDown(CPoint pt);
 	void OnTrayLButtonDown(CPoint pt);
-	CBatteryAlarmDlg(CWnd* pParent = NULL);	// standard constructor
+
+	CBatteryAlarmDlg(CWnd* pParent = NULL);
 
 // Dialog Data
 	//{{AFX_DATA(CBatteryAlarmDlg)
@@ -41,6 +43,14 @@ public:
 protected:
 	HICON m_hIcon;
 
+	// system power management members
+	HPOWERNOTIFY m_hPowerSchemeNotify, m_hPowerSourceNotify, m_hBatteryPowerNotify;
+	bool m_bOnBattery;
+	CStatic m_cPowerScheme, m_cPowerSource, m_cBatteryPower, m_cMessage;
+	int m_nBatteryPower;
+	SYSTEM_POWER_STATUS m_spsPower;
+	int m_iPowerChange;
+
 	// Generated message map functions
 	//{{AFX_MSG(CBatteryAlarmDlg)
 	virtual BOOL OnInitDialog();
@@ -53,6 +63,10 @@ protected:
 	afx_msg void OnMenu1();
 	//}}AFX_MSG
 	DECLARE_MESSAGE_MAP()
+	
+public:
+	afx_msg UINT OnPowerBroadcast(UINT nPowerEvent, LPARAM nEventData);
+	afx_msg void OnTimer(UINT_PTR nIDEvent);
 };
 
 //{{AFX_INSERT_LOCATION}}
