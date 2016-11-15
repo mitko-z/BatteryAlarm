@@ -143,7 +143,17 @@ BOOL CBatteryAlarmDlg::OnInitDialog()
 	
 	// TODO: Add extra initialization here
 
-	SetTimer(42, 5000, nullptr);
+	// init timers
+	m_tPowerCheck = Timer(42, 1000);
+	SetTimer(m_tPowerCheck.id, m_tPowerCheck.duration, nullptr);
+
+	// init sounds
+	m_sPathToWarningMessageSoundFile = "warning-message-2.wav";
+	if (!m_sfsbWarningMessageBuffer.loadFromFile(m_sPathToWarningMessageSoundFile))
+	{
+		MessageBox("Error loading of warning message sound file!");
+	}
+	m_sfsWarningMessageSound.setBuffer(m_sfsbWarningMessageBuffer);
 	
 	return TRUE;  // return TRUE  unless you set the focus to a control
 }
@@ -340,7 +350,7 @@ void CBatteryAlarmDlg::OnMinimize()
 
 void CBatteryAlarmDlg::OnExit() 
 {
-	KillTimer(42);
+	KillTimer(m_tPowerCheck.id);
 	Shell_NotifyIcon(NIM_DELETE, &m_TrayData);
 	DestroyWindow();
 	
@@ -435,7 +445,7 @@ UINT CBatteryAlarmDlg::OnPowerBroadcast(UINT nPowerEvent, LPARAM nEventData)
 
 void CBatteryAlarmDlg::OnTimer(UINT_PTR nIDEvent)
 {
-	if (nIDEvent == 42)
+	if (nIDEvent == m_tPowerCheck.id)
 	{
 		std::string message = "";
 
@@ -453,6 +463,8 @@ void CBatteryAlarmDlg::OnTimer(UINT_PTR nIDEvent)
 		{
 			message = "Warning! You just went on battery power.";
 			m_iPowerChange = 0;
+			m_sfsWarningMessageSound.play();
+			MessageBox(message.c_str());
 		}
 
 		if (m_spsPower.ACLineStatus == 1 & m_iPowerChange == 0)
@@ -460,10 +472,6 @@ void CBatteryAlarmDlg::OnTimer(UINT_PTR nIDEvent)
 			m_iPowerChange = 1;
 		}
 
-		if (message != "")
-		{
-			MessageBox(message.c_str());
-		}
 	}
 
 	CDialog::OnTimer(nIDEvent);

@@ -9,7 +9,11 @@
 #endif // _MSC_VER > 1000
 
 #include <string> // for std::string variables
-#include <sstream>
+#include <sstream> // string conversions
+
+#include <SFML/Audio.hpp>
+
+#include "Timer.h"
 
 #define WM_TRAY_MESSAGE (WM_USER + 1)
 
@@ -50,6 +54,14 @@ protected:
 	int m_nBatteryPower;
 	SYSTEM_POWER_STATUS m_spsPower;
 	int m_iPowerChange;
+
+	// timers
+	Timer m_tPowerCheck;
+
+	// sound effects
+	sf::SoundBuffer m_sfsbWarningMessageBuffer;
+	sf::Sound m_sfsWarningMessageSound;
+	std::string m_sPathToWarningMessageSoundFile;
 
 	// Generated message map functions
 	//{{AFX_MSG(CBatteryAlarmDlg)

@@ -90,7 +90,7 @@
       <SubSystem>Windows</SubSystem>
       <OutputFile>.\Release\BatteryAlarm.exe</OutputFile>
       <AdditionalLibraryDirectories>E:\Programs\SFML-2.4.0-sources\SFML-2.4.0\build\lib\Release;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>sfml-audio.lib;sfml-graphics.lib;sfml-main.lib;sfml-window.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>sfml-audio.lib;sfml-graphics.lib;sfml-window.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
@@ -155,6 +155,7 @@
     <ClInclude Include="StdAfx.h" />
     <ClInclude Include="BatteryAlarm.h" />
     <ClInclude Include="BatteryAlarmDlg.h" />
+    <ClInclude Include="Timer.h" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="res\BatteryAlarm.ico" />
