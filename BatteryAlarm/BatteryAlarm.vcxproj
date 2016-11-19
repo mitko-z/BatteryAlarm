@@ -159,6 +159,7 @@
   </ItemGroup>
   <ItemGroup>
     <Image Include="res\BatteryAlarm.ico" />
+    <Image Include="res\icon1.ico" />
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="res\BatteryAlarm.rc2" />
