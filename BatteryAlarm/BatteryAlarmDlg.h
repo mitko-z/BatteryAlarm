@@ -12,6 +12,9 @@
 #include <sstream> // string conversions
 
 #include <SFML/Audio.hpp>
+#include <SFML/Graphics.hpp>
+#include <SFML/Window.hpp>
+#include <SFML/System.hpp>
 
 #include "Timer.h"
 
@@ -57,11 +60,20 @@ protected:
 
 	// timers
 	Timer m_tPowerCheck;
+	Timer m_tWindowRefresh;
 
-	// sound effects
+	// sounds
 	sf::SoundBuffer m_sfsbWarningMessageBuffer;
 	sf::Sound m_sfsWarningMessageSound;
 	std::string m_sPathToWarningMessageSoundFile;
+
+	// sfml window management support
+	sf::RenderWindow m_sfwChangePowerMessage;
+	sf::Texture m_sftChangePowerMessage;
+	sf::RectangleShape m_sfrChangePowerMessage;
+	sf::Vector2f m_sfv2WindowChangePowerMessageSize;
+	bool m_bIsWindowAlive;
+	sf::Event m_sfeEvent;
 
 	// Generated message map functions
 	//{{AFX_MSG(CBatteryAlarmDlg)

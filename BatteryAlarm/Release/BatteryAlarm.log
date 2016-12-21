@@ -1,13 +1,2 @@
-﻿  BatteryAlarm.cpp
-BatteryAlarm.cpp(52): warning C4996: 'CWinApp::Enable3dControls': CWinApp::Enable3dControls is no longer needed. You should remove this call.
-  C:\Program Files\Microsoft Visual Studio 14.0\VC\atlmfc\include\afxwin2.inl(1074): note: see declaration of 'CWinApp::Enable3dControls'
-  BatteryAlarmDlg.cpp
-BatteryAlarmDlg.cpp(320): warning C4996: 'strcpy': This function or variable may be unsafe. Consider using strcpy_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
-  C:\Program Files\Windows Kits\10\Include\10.0.10240.0\ucrt\string.h(119): note: see declaration of 'strcpy'
-BatteryAlarmDlg.cpp(384): warning C4554: '&': check operator precedence for possible error; use parentheses to clarify precedence
-BatteryAlarmDlg.cpp(390): warning C4554: '&': check operator precedence for possible error; use parentheses to clarify precedence
-BatteryAlarmDlg.cpp(462): warning C4554: '&': check operator precedence for possible error; use parentheses to clarify precedence
-BatteryAlarmDlg.cpp(470): warning C4554: '&': check operator precedence for possible error; use parentheses to clarify precedence
-  Generating Code...
-  BatteryAlarm.vcxproj -> E:\docs\programirane\BatteryAlarm\BatteryAlarm\.\Release\BatteryAlarm.exe
+﻿  BatteryAlarm.vcxproj -> E:\docs\programirane\BatteryAlarm\BatteryAlarm\.\Release\BatteryAlarm.exe
   BatteryAlarm.vcxproj -> .\Release\BatteryAlarm.pdb (Full PDB)

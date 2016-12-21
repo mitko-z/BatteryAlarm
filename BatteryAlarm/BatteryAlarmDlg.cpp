@@ -101,22 +101,6 @@ END_MESSAGE_MAP()
 BOOL CBatteryAlarmDlg::OnInitDialog()
 {
 	CDialog::OnInitDialog();
-
-	
-	// power management preparation
-	m_hPowerSchemeNotify = RegisterPowerSettingNotification(m_hWnd, &GUID_POWERSCHEME_PERSONALITY, DEVICE_NOTIFY_WINDOW_HANDLE);
-	if (NULL == m_hPowerSchemeNotify)
-		ATLTRACE("Failed to register for notification of power scheme changes!\n");
-
-	if (GetSystemPowerStatus(&m_spsPower) == 0)
-	{
-		MessageBox ("Error: Could not get the system power status in InitDialog method!");
-	}
-	else 
-	{ 
-		m_iPowerChange = m_spsPower.ACLineStatus; 
-	}
-
 	
 	// Add "About..." menu item to system menu.
 
@@ -143,18 +127,48 @@ BOOL CBatteryAlarmDlg::OnInitDialog()
 	
 	// TODO: Add extra initialization here
 
-	// init timers
+	/// power management preparation ///
+	m_hPowerSchemeNotify = RegisterPowerSettingNotification(m_hWnd, &GUID_POWERSCHEME_PERSONALITY, DEVICE_NOTIFY_WINDOW_HANDLE);
+	if (NULL == m_hPowerSchemeNotify)
+		ATLTRACE("Failed to register for notification of power scheme changes!\n");
+
+	if (GetSystemPowerStatus(&m_spsPower) == 0)
+	{
+		MessageBox("Error: Could not get the system power status in initialization!");
+	}
+	else
+	{
+		m_iPowerChange = m_spsPower.ACLineStatus;
+	}
+
+	/// init timers ///
 	m_tPowerCheck = Timer(42, 1000);
 	SetTimer(m_tPowerCheck.id, m_tPowerCheck.duration, nullptr);
+	m_tWindowRefresh = Timer(1, 15);
+	SetTimer(m_tWindowRefresh.id, m_tWindowRefresh.duration, nullptr);
 
-	// init sounds
+	/// init sounds ///
 	m_sPathToWarningMessageSoundFile = "warning-message-2.wav";
 	if (!m_sfsbWarningMessageBuffer.loadFromFile(m_sPathToWarningMessageSoundFile))
 	{
 		MessageBox("Error loading of warning message sound file!");
 	}
 	m_sfsWarningMessageSound.setBuffer(m_sfsbWarningMessageBuffer);
+
+	/// init messages windows ///
+	m_sfwChangePowerMessage.setFramerateLimit(60);
+	if (!m_sftChangePowerMessage.loadFromFile("ChagePowerMessage.png"))
+	{
+		MessageBox("Error loading of warning message image file!");
+	}
+	m_sfv2WindowChangePowerMessageSize.x = 640;
+	m_sfv2WindowChangePowerMessageSize.y = 480;
+	m_sfrChangePowerMessage.setSize(m_sfv2WindowChangePowerMessageSize);
 	
+	m_sfrChangePowerMessage.setPosition(0, 0);
+	m_sfrChangePowerMessage.setTexture(&m_sftChangePowerMessage);
+	m_bIsWindowAlive = false;
+
 	return TRUE;  // return TRUE  unless you set the focus to a control
 }
 
@@ -351,6 +365,11 @@ void CBatteryAlarmDlg::OnMinimize()
 void CBatteryAlarmDlg::OnExit() 
 {
 	KillTimer(m_tPowerCheck.id);
+	if(m_sfwChangePowerMessage.isOpen())
+	{ 
+		m_sfwChangePowerMessage.close(); 
+	}
+	KillTimer(m_tWindowRefresh.id);
 	Shell_NotifyIcon(NIM_DELETE, &m_TrayData);
 	DestroyWindow();
 	
@@ -447,11 +466,11 @@ void CBatteryAlarmDlg::OnTimer(UINT_PTR nIDEvent)
 {
 	if (nIDEvent == m_tPowerCheck.id)
 	{
-		std::string message = "";
 
 		if (GetSystemPowerStatus(&m_spsPower) == 0)
 		{
-			message = "Error: Could not get the system power status!";
+			// message = "Error: Could not get the system power status!";
+			MessageBox("Error: Could not get the system power status!");
 		}
 
 		// debug
@@ -461,10 +480,26 @@ void CBatteryAlarmDlg::OnTimer(UINT_PTR nIDEvent)
 		
 		if (m_spsPower.ACLineStatus == 0 & m_iPowerChange == 1)
 		{
-			message = "Warning! You just went on battery power.";
+			// message = "Warning! You just went on battery power.";
+			if (!m_sfwChangePowerMessage.isOpen())
+			{
+				m_sfwChangePowerMessage.create
+					(
+						sf::VideoMode
+							(
+								m_sfv2WindowChangePowerMessageSize.x, 
+								m_sfv2WindowChangePowerMessageSize.y
+							),
+						"Battery allarm : System Power Changed!"
+					);
+			}
+			m_sfwChangePowerMessage.clear();
+			m_sfwChangePowerMessage.draw(m_sfrChangePowerMessage);
+			m_sfwChangePowerMessage.display();
 			m_iPowerChange = 0;
 			m_sfsWarningMessageSound.play();
-			MessageBox(message.c_str());
+			m_bIsWindowAlive = true;
+			//MessageBox(message.c_str());
 		}
 
 		if (m_spsPower.ACLineStatus == 1 & m_iPowerChange == 0)
@@ -474,5 +509,33 @@ void CBatteryAlarmDlg::OnTimer(UINT_PTR nIDEvent)
 
 	}
 
+
+	if (nIDEvent = m_tWindowRefresh.id)
+	{
+		if (m_bIsWindowAlive)
+		{
+			while (m_sfwChangePowerMessage.pollEvent(m_sfeEvent))
+			{
+				if
+					(
+						m_sfeEvent.type == sf::Event::Closed ||
+						(m_sfeEvent.type == sf::Event::KeyPressed && m_sfeEvent.key.code == sf::Keyboard::Escape)
+					)
+				{
+					m_bIsWindowAlive = false;
+				}
+			}
+			
+			m_sfwChangePowerMessage.clear();
+			m_sfwChangePowerMessage.draw(m_sfrChangePowerMessage);
+
+			m_sfwChangePowerMessage.display();
+		}
+
+		if(!m_bIsWindowAlive && m_sfwChangePowerMessage.isOpen())
+		{
+			m_sfwChangePowerMessage.close();
+		}
+	}
 	CDialog::OnTimer(nIDEvent);
 }
