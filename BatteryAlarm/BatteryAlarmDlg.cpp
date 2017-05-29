@@ -526,15 +526,18 @@ void CBatteryAlarmDlg::OnTimer(UINT_PTR nIDEvent)
 				}
 			}
 			
-			m_sfwChangePowerMessage.clear();
+			/*m_sfwChangePowerMessage.clear();
 			m_sfwChangePowerMessage.draw(m_sfrChangePowerMessage);
 
-			m_sfwChangePowerMessage.display();
+			m_sfwChangePowerMessage.display();*/
 		}
 
-		if(!m_bIsWindowAlive && m_sfwChangePowerMessage.isOpen())
+		if (m_sfwChangePowerMessage.isOpen())
 		{
-			m_sfwChangePowerMessage.close();
+			if (!m_bIsWindowAlive || m_spsPower.ACLineStatus == 1)
+			{
+				m_sfwChangePowerMessage.close();
+			}
 		}
 	}
 	CDialog::OnTimer(nIDEvent);
