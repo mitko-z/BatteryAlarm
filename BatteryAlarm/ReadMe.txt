@@ -1,7 +1,8 @@
+***
 ========================================================================
        MICROSOFT FOUNDATION CLASS LIBRARY : BatteryAlarm
 ========================================================================
-
+***
 
 AppWizard has created this BatteryAlarm application for you.  This application
 not only demonstrates the basics of using the Microsoft Foundation classes
