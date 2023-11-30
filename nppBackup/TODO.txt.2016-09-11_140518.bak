@@ -1,5 +1,0 @@
-- make a window which is able to minimize to system tray
-	|
-	- made an icon to appear in system tray
-	- hide the window from the taskbar
-	- make available the window to be restored from system tray by mouse double click on it
